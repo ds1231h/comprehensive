@@ -104,21 +104,21 @@ VOID AddOneTextInfo(MYTEXT mytt)
 
 BOOL MySaveData(void)
 {
-	FILE* fp = fopen("E:\\VSworksapce\\comprehensive1_2\\comprehensive1_2\\a.bin", "ab");
+	FILE* fp = fopen("e:\\vsworksapce\\conprehensive1_2\\conprehensive1_2\\a.bin", "wb");
 
 	if (fp != NULL)
 	{
 		fwrite(&goCountline, sizeof(int), 1, fp);
-		fwrite(&pgLines, sizeof(MYLINE), goCountline, fp);
+		fwrite(pgLines, sizeof(MYLINE), goCountline, fp);
 
 		fwrite(&goCountrectangle, sizeof(int), 1, fp);
-		fwrite(&pgRectangle, sizeof(MYRECTANGLE), goCountrectangle, fp);
+		fwrite(pgRectangle, sizeof(MYRECTANGLE), goCountrectangle, fp);
 
 		fwrite(&goCountellipse, sizeof(int), 1, fp);
-		fwrite(&pgEllipse, sizeof(MYELLIPSE), goCountellipse, fp);
+		fwrite(pgEllipse, sizeof(MYELLIPSE), goCountellipse, fp);
 
 		fwrite(&goCountmessage, sizeof(int), 1, fp);
-		fwrite(&pgTexts, sizeof(MYTEXT), goCountmessage, fp);
+		fwrite(pgTexts, sizeof(MYTEXT), goCountmessage, fp);
 
 		fclose(fp);
 		return TRUE;
@@ -130,7 +130,7 @@ BOOL MySaveData(void)
 BOOL MyLoadData(void)
 {
 	FreeBuffer();
-	FILE* fp = fopen("E:\\VSworksapce\\comprehensive 1\\comprehensive\\a.bin", "rb");
+	FILE* fp = fopen("e:\\vsworksapce\\conprehensive1_2\\conprehensive1_2\\a.bin", "rb");
 
 	if (fp != NULL)
 	{
@@ -143,37 +143,33 @@ BOOL MyLoadData(void)
 			fread(&r, sizeof(MYLINE), 1, fp);
 			AddOneLineInfo(r);
 		}
-		fseek(fp, iCount, SEEK_CUR);
 
 		iCount = 0;
 		fread(&iCount, sizeof(int), 1, fp);
 		for (int i = 0;i < iCount; i++)
 		{
-			MYLINE r;
-			fread(&r, sizeof(MYLINE), 1, fp);
-			AddOneLineInfo(r);
+			MYRECTANGLE r;
+			fread(&r, sizeof(MYRECTANGLE), 1, fp);
+			AddOneRectInfo(r);
 		}
-		fseek(fp, iCount, SEEK_CUR);
 
 		iCount = 0;
 		fread(&iCount, sizeof(int), 1, fp);
 		for (int i = 0;i < iCount; i++)
 		{
-			MYLINE r;
-			fread(&r, sizeof(MYLINE), 1, fp);
-			AddOneLineInfo(r);
+			MYELLIPSE r;
+			fread(&r, sizeof(MYELLIPSE), 1, fp);
+			AddOneEllipseInfo(r);
 		}
-		fseek(fp, iCount, SEEK_CUR);
 
 		iCount = 0;
 		fread(&iCount, sizeof(int), 1, fp);
 		for (int i = 0;i < iCount; i++)
 		{
-			MYLINE r;
-			fread(&r, sizeof(MYLINE), 1, fp);
-			AddOneLineInfo(r);
+			MYTEXT r;
+			fread(&r, sizeof(MYTEXT), 1, fp);
+			AddOneTextInfo(r);
 		}
-		fseek(fp, iCount, SEEK_CUR);
 
 		fclose(fp);
 		return TRUE;

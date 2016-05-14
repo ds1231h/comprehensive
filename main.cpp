@@ -142,6 +142,10 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				{
 					MessageBox(hWnd, TEXT("load data error!"), TEXT("error"), TRUE);
 				}
+				else
+				{
+					InvalidateRect(hWnd, NULL, TRUE);
+				}
 				return 0;
 
 			case ID_DRAW_DRAWMYLINE:
