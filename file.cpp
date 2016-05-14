@@ -104,7 +104,7 @@ VOID AddOneTextInfo(MYTEXT mytt)
 
 BOOL MySaveData(void)
 {
-	FILE* fp = fopen("E:\\VSworksapce\\comprehensive 1\\comprehensive\\a.bin", "ab");
+	FILE* fp = fopen("E:\\VSworksapce\\comprehensive1_2\\comprehensive1_2\\a.bin", "ab");
 
 	if (fp != NULL)
 	{
@@ -112,13 +112,13 @@ BOOL MySaveData(void)
 		fwrite(&pgLines, sizeof(MYLINE), goCountline, fp);
 
 		fwrite(&goCountrectangle, sizeof(int), 1, fp);
-		fwrite(&pgRectangle, sizeof(MYLINE), goCountrectangle, fp);
+		fwrite(&pgRectangle, sizeof(MYRECTANGLE), goCountrectangle, fp);
 
 		fwrite(&goCountellipse, sizeof(int), 1, fp);
-		fwrite(&pgEllipse, sizeof(MYLINE), goCountellipse, fp);
+		fwrite(&pgEllipse, sizeof(MYELLIPSE), goCountellipse, fp);
 
 		fwrite(&goCountmessage, sizeof(int), 1, fp);
-		fwrite(&pgTexts, sizeof(MYLINE), goCountmessage, fp);
+		fwrite(&pgTexts, sizeof(MYTEXT), goCountmessage, fp);
 
 		fclose(fp);
 		return TRUE;
