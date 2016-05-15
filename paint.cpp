@@ -66,20 +66,20 @@ BOOL GetMyColor(HWND hWnd, COLORREF *pColor)
 		RGB(0, 0, 255),
 	};
 
+	// 给结构体赋值
 	cc.lStructSize    = sizeof (CHOOSECOLOR);
 	cc.hwndOwner      = hWnd;
 	cc.hInstance      = NULL;
-	cc.rgbResult      = *pColor; // 这里为什么会出现两次给rgbResult赋值？
+	cc.rgbResult      = *pColor;// 颜色选定为通用颜色对话框中当前选中的颜色
 	cc.lpCustColors   = crCustomColors;
 	cc.Flags          = CC_RGBINIT | CC_FULLOPEN;
 	cc.lCustData      = 0;
 	cc.lpfnHook       = NULL;
 	cc.lpTemplateName = NULL;
-	cc.rgbResult = RGB(255, 0, 0);
 
 	if (ChooseColor (&cc))
 	{
-		*pColor = crCustomColors[0];
+		*pColor = cc.rgbResult;
 		bRet = TRUE;
 	}
 	return bRet;

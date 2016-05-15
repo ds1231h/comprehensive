@@ -13,7 +13,7 @@
 #define MYMESSAGE	4
 
 #define DEF_BUFFER_SIZE			3
-#define DEF_BUFFER_INC_SIZE		2
+#define DEF_BUFFER_INC_SIZE		1
 
 // 结构体
 typedef struct Myline
@@ -48,24 +48,15 @@ typedef struct MyText
 }MYTEXT, *PMYTEXT;
 
 // 声明变量
-extern int goCountSizerectangle;
-extern int goCountSizeellipse;
-extern int goCountSizeline;
-extern int goCountSizemessage;
 extern int goCountrectangle;
 extern int goCountellipse;
 extern int goCountline;
 extern int goCountmessage;
-extern BOOL gLoad;
 extern PMYLINE pgLines;
 extern PELLIPSE pgEllipse;
 extern PRECTANGLE pgRectangle;
 extern PMYTEXT pgTexts;
 extern MYTEXT gTexts;
-extern MYLINE gLines;
-extern MYELLIPSE gEllipse;
-extern MYRECTANGLE gRectangle;
-
 
 // 函数声明
 BOOL MySaveData(void);

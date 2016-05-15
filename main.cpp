@@ -1,16 +1,5 @@
 #include "struct.h"
 
-
-int goCount;
-BOOL gLoad;
-int gDrawMode = DRAW_LINE;
-MYLINE gLines;
-MYELLIPSE gEllipse;
-MYRECTANGLE gRectangle;
-LOGPEN gPenInfo = {PS_SOLID, 1, RGB(0,0,0)};
-LOGBRUSH gBrInfo = { BS_SOLID, RGB(255,255,255), NULL};
-LOGFONT gFontInfo;
-
 int WINAPI WinMain(HINSTANCE hInstance,         //当前实例句柄
 	HINSTANCE hPrevInstance,
 	PSTR szCmdLine,
@@ -81,15 +70,21 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	PAINTSTRUCT ps;
 	RECT        rect;
 	HMENU hMenu;
+	static int gDrawMode = DRAW_LINE;// 绘画模式
+	// 结构体存放图元信息
+	static MYLINE gLines;
+	static MYELLIPSE gEllipse;
+	static MYRECTANGLE gRectangle;
+	// 逻辑笔、刷、字体
+	static LOGPEN gPenInfo = {PS_SOLID, 1, RGB(255,255,255)};
+	static LOGBRUSH gBrInfo = { BS_SOLID, RGB(0,0,0), NULL};
+	static LOGFONT gFontInfo;
 
 	switch (message)
 	{
-	case WM_CREATE:
-		goCount = 2;
-		gLoad =FALSE;
-		return 0;
-
 	case WM_INITMENUPOPUP:
+		// 下拉菜单自左边起从0开始
+		// 对指定绘图模式打钩
 		if (lParam == 1)
 		{
 			if (gDrawMode == DRAW_LINE)
@@ -133,6 +128,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case ID_FILE_mySAVE:
 				if (!MySaveData())
 				{
+					// 保存失败
 					MessageBox(hWnd, TEXT("save data error!"), TEXT("error"), TRUE);
 				}
 				return 0;
@@ -140,29 +136,31 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case ID_FILE_myLOAD:
 				if (!MyLoadData())
 				{
+					// 读取失败
 					MessageBox(hWnd, TEXT("load data error!"), TEXT("error"), TRUE);
 				}
 				else
 				{
+					// 读取成功，刷新屏幕
 					InvalidateRect(hWnd, NULL, TRUE);
 				}
 				return 0;
 
+				// 判断绘图模式
 			case ID_DRAW_DRAWMYLINE:
-			case ID_DRAW_DRAWMYLINES:
-				gDrawMode = 1;
+				gDrawMode = DRAW_LINE;
 				return 0;
 
 			case ID_DRAW_DRAWMYELLIPSE:
-				gDrawMode = 3;
+				gDrawMode = DRAW_ELIP;
 				return 0;
 
 			case ID_DRAW_DRAWMYRECTANGLE:
-				gDrawMode = 2;
+				gDrawMode = DRAW_RECT;
 				return 0;
 
 			case ID_DRAW_MESSAGE:
-				gDrawMode = 4;
+				gDrawMode = MYMESSAGE;
 				return 0;
 
 			case ID_SETTING_PEN:
@@ -201,6 +199,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				MAKEINTRESOURCE(IDD_DIALOG1),
 				hWnd, TextInputDlgProc) == IDOK)
 			{
+				// 内存管理
 				AddOneTextInfo(gTexts);
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
@@ -240,7 +239,6 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		hdc=BeginPaint (hWnd, &ps);
 		GetClientRect (hWnd, &rect);
 		DrawMyline(hdc, pgLines);
-		DrawMyLines(hdc, pgLines, goCount);
 		DrawMyEllipse(hdc, pgEllipse);
 		DrawMyRectangle(hdc, pgRectangle);
 		for (int i=0; i <goCountmessage; i++)

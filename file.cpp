@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "struct.h"
+
+// 全局变量记录图元数目
 int goCountSizerectangle;
 int goCountSizeellipse;
 int goCountSizeline;
@@ -8,6 +10,8 @@ int goCountrectangle;
 int goCountellipse;
 int goCountline;
 int goCountmessage;
+
+// 全局变量存放图元信息
 PMYLINE pgLines = NULL;
 PELLIPSE pgEllipse = NULL;
 PRECTANGLE pgRectangle = NULL;
@@ -29,14 +33,17 @@ VOID AddOneRectInfo(MYRECTANGLE myrc)
 		if (pNew == NULL) return;	// 申请加大的缓冲区不成功，直接返回
 
 		memcpy(pNew, pgRectangle, goCountrectangle*sizeof(MYRECTANGLE));
-		delete pgRectangle;					// 释放之前的缓冲区
+		if (goCountmessage != 0)
+		{
+			delete pgRectangle;					// 释放之前的缓冲区
+		}
 		pgRectangle = pNew;
 		goCountSizerectangle += DEF_BUFFER_INC_SIZE;
 	}
 	pgRectangle[goCountrectangle++] = myrc;		// 保存图形数据
 }
 
-VOID AddOneEllipseInfo(MYELLIPSE myrc)
+VOID AddOneEllipseInfo(MYELLIPSE myep)
 {
 	if (pgEllipse == NULL)
 	{
@@ -51,14 +58,17 @@ VOID AddOneEllipseInfo(MYELLIPSE myrc)
 		if (pNew == NULL) return;	// 申请加大的缓冲区不成功，直接返回
 
 		memcpy(pNew, pgEllipse, goCountellipse*sizeof(MYELLIPSE));
-		delete pgEllipse;					// 释放之前的缓冲区
+		if (goCountmessage != 0)
+		{
+			delete pgEllipse;					// 释放之前的缓冲区
+		}
 		pgEllipse = pNew;
 		goCountSizeellipse += DEF_BUFFER_INC_SIZE;
 	}
-	pgEllipse[goCountellipse++] = myrc;		// 保存图形数据
+	pgEllipse[goCountellipse++] = myep;		// 保存图形数据
 }
 
-VOID AddOneLineInfo(MYLINE myrc)
+VOID AddOneLineInfo(MYLINE myl)
 {
 	if (pgLines == NULL)
 	{
@@ -73,11 +83,14 @@ VOID AddOneLineInfo(MYLINE myrc)
 		if (pNew == NULL) return;	// 申请加大的缓冲区不成功，直接返回
 
 		memcpy(pNew, pgLines, goCountline*sizeof(MYLINE));
-		delete pgLines;					// 释放之前的缓冲区
+		if (goCountmessage != 0)
+		{
+			delete pgLines;					// 释放之前的缓冲区
+		}
 		pgLines = pNew;
 		goCountSizeline += DEF_BUFFER_INC_SIZE;
 	}
-	pgLines[goCountline++] = myrc;		// 保存图形数据
+	pgLines[goCountline++] = myl;		// 保存图形数据
 }
 
 VOID AddOneTextInfo(MYTEXT mytt)
@@ -88,15 +101,18 @@ VOID AddOneTextInfo(MYTEXT mytt)
 		if (pgTexts == NULL)	return;		// 申请缓冲区不成功，直接返回
 		goCountSizemessage = DEF_BUFFER_SIZE;
 	}
-	if (goCountmessage >= goCountSizemessage)
+	if (goCountmessage >= goCountSizemessage)// 如果当前文本数大于缓冲区数
 	{
 		// 扩大缓冲区
-		MYTEXT* pNewTexts = new MYTEXT[goCountmessage + DEF_BUFFER_INC_SIZE];
+		PMYTEXT pNewTexts = new MYTEXT[goCountmessage + DEF_BUFFER_INC_SIZE];
 		if (pNewTexts == NULL) return;	// 申请加大的缓冲区不成功，直接返回
 
 		memcpy(pNewTexts, pgTexts, goCountmessage*sizeof(MYTEXT));
-		delete pgTexts;					// 释放之前的缓冲区
-		pgTexts = pNewTexts;
+		if (goCountmessage != 0)			// 在读取操作中freebuffer函数已经将原缓冲区清空，此时不能再清空一次
+		{
+			delete pgTexts;					// 释放之前的缓冲区
+		}
+		pgTexts = pNewTexts;			// 重新给原缓冲区赋值
 		goCountSizemessage += DEF_BUFFER_INC_SIZE;
 	}
 	pgTexts[goCountmessage++] = mytt;		// 保存图形数据
