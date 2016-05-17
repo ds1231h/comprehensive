@@ -76,8 +76,8 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static MYELLIPSE gEllipse;
 	static MYRECTANGLE gRectangle;
 	// 逻辑笔、刷、字体
-	static LOGPEN gPenInfo = {PS_SOLID, 1, RGB(255,255,255)};
-	static LOGBRUSH gBrInfo = { BS_SOLID, RGB(0,0,0), NULL};
+	static LOGPEN gPenInfo = {PS_SOLID, 1, RGB(0, 0, 0)};
+	static LOGBRUSH gBrInfo = { BS_SOLID, RGB(255, 255, 255), NULL};
 	static LOGFONT gFontInfo;
 
 	switch (message)
@@ -85,34 +85,26 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_INITMENUPOPUP:
 		// 下拉菜单自左边起从0开始
 		// 对指定绘图模式打钩
+		CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYLINE, MF_UNCHECKED);
+		CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYRECTANGLE, MF_UNCHECKED);
+		CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYELLIPSE, MF_UNCHECKED);
+		CheckMenuItem((HMENU)wParam, ID_DRAW_MESSAGE, MF_UNCHECKED);
 		if (lParam == 1)
 		{
 			if (gDrawMode == DRAW_LINE)
 			{
 				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYLINE, MF_CHECKED);
-				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYRECTANGLE, MF_UNCHECKED);
-				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYELLIPSE, MF_UNCHECKED);
-				CheckMenuItem((HMENU)wParam, ID_DRAW_MESSAGE, MF_UNCHECKED);
 			}
 			else if (gDrawMode == DRAW_RECT)
 			{
-				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYLINE, MF_UNCHECKED);
 				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYRECTANGLE, MF_CHECKED);
-				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYELLIPSE, MF_UNCHECKED);
-				CheckMenuItem((HMENU)wParam, ID_DRAW_MESSAGE, MF_UNCHECKED);
 			}
 			else if (gDrawMode == DRAW_ELIP)
 			{
-				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYLINE, MF_UNCHECKED);
-				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYRECTANGLE, MF_UNCHECKED);
 				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYELLIPSE, MF_CHECKED);
-				CheckMenuItem((HMENU)wParam, ID_DRAW_MESSAGE, MF_UNCHECKED);
 			}
 			else if (gDrawMode == MYMESSAGE)
 			{
-				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYLINE, MF_UNCHECKED);
-				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYRECTANGLE, MF_UNCHECKED);
-				CheckMenuItem((HMENU)wParam, ID_DRAW_DRAWMYELLIPSE, MF_UNCHECKED);
 				CheckMenuItem((HMENU)wParam, ID_DRAW_MESSAGE, MF_CHECKED);
 			}
 		}
@@ -238,13 +230,13 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
 		hdc=BeginPaint (hWnd, &ps);
 		GetClientRect (hWnd, &rect);
-		DrawMyline(hdc, pgLines);
-		DrawMyEllipse(hdc, pgEllipse);
-		DrawMyRectangle(hdc, pgRectangle);
-		for (int i=0; i <goCountmessage; i++)
+		DrawMyline(hdc, pgPaints.pgLines);
+		DrawMyEllipse(hdc, pgPaints.pgEllipse);
+		DrawMyRectangle(hdc, pgPaints.pgRectangle);
+		for (int i=0; i <myCount.message; i++)
 		{
-			TextOut(hdc, pgTexts[i].ptS.x, pgTexts[i].ptS.y, 
-				(LPCWSTR)pgTexts[i].szText, lstrlen((LPCWSTR)pgTexts[i].szText));
+			TextOut(hdc, pgPaints.pgTexts[i].ptS.x, pgPaints.pgTexts[i].ptS.y, 
+				(LPCWSTR)pgPaints.pgTexts[i].szText, lstrlen((LPCWSTR)pgPaints.pgTexts[i].szText));
 		}
 		EndPaint(hWnd, &ps ); 
 		return 0;

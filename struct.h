@@ -47,16 +47,25 @@ typedef struct MyText
 	CHAR szText[128];
 }MYTEXT, *PMYTEXT;
 
+typedef struct goCount
+{
+	int line;
+	int ellipse;
+	int rectangle;
+	int message;
+}MYOCOUNT, PMYOCOUNT;
+
+typedef struct pgpaints
+{
+	PMYLINE pgLines;
+	PELLIPSE pgEllipse;
+	PRECTANGLE pgRectangle;
+	PMYTEXT pgTexts;
+}PGPAINTS;
 // 声明变量
-extern int goCountrectangle;
-extern int goCountellipse;
-extern int goCountline;
-extern int goCountmessage;
-extern PMYLINE pgLines;
-extern PELLIPSE pgEllipse;
-extern PRECTANGLE pgRectangle;
-extern PMYTEXT pgTexts;
+extern MYOCOUNT myCount;
 extern MYTEXT gTexts;
+extern PGPAINTS pgPaints;
 
 // 函数声明
 BOOL MySaveData(void);

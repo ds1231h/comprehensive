@@ -2,12 +2,12 @@
 
 void DrawMyline(HDC hdc, PMYLINE pLine)// 传递一条线
 {
-	for (int i = 0; i < goCountline; i++)
+	for (int i = 0; i < myCount.line; i++)
 	{
-		HPEN hPen = CreatePenIndirect(&pgLines[i].penInfo);
+		HPEN hPen = CreatePenIndirect(&pLine[i].penInfo);
 		HPEN hPenOld = (HPEN)SelectObject(hdc, hPen);
-		MoveToEx(hdc, pgLines[i].ptS.x, pgLines[i].ptS.y, NULL);
-		LineTo(hdc, pgLines[i].ptE.x, pgLines[i].ptE.y);
+		MoveToEx(hdc, pLine[i].ptS.x, pLine[i].ptS.y, NULL);
+		LineTo(hdc, pLine[i].ptE.x, pLine[i].ptE.y);
 		SelectObject(hdc, hPenOld);
 		DeleteObject(hPen);
 	}
@@ -23,7 +23,7 @@ void DrawMyLines(HDC hdc, PMYLINE pLines, int iCount)// 传递一条线
 
 void DrawMyEllipse(HDC hdc, PELLIPSE pgEllipse)
 {
-	for (int i = 0; i < goCountellipse; i++)
+	for (int i = 0; i < myCount.ellipse; i++)
 	{
 		HPEN hPen = CreatePenIndirect(&pgEllipse[i].penInfo);
 		HPEN hPenOld = (HPEN)SelectObject(hdc, hPen);
@@ -40,7 +40,7 @@ void DrawMyEllipse(HDC hdc, PELLIPSE pgEllipse)
 
 void DrawMyRectangle(HDC hdc, PRECTANGLE pgRectangle)
 {
-	for (int i = 0; i < goCountrectangle; i++)
+	for (int i = 0; i < myCount.rectangle; i++)
 	{
 		HPEN hPen = CreatePenIndirect(&pgRectangle[i].penInfo);
 		HPEN hPenOld = (HPEN)SelectObject(hdc, hPen);

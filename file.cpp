@@ -2,139 +2,130 @@
 #include "struct.h"
 
 // 全局变量记录图元数目
-int goCountSizerectangle;
-int goCountSizeellipse;
-int goCountSizeline;
-int goCountSizemessage;
-int goCountrectangle;
-int goCountellipse;
-int goCountline;
-int goCountmessage;
+MYOCOUNT myCount;
+MYOCOUNT myCountSize;
 
 // 全局变量存放图元信息
-PMYLINE pgLines = NULL;
-PELLIPSE pgEllipse = NULL;
-PRECTANGLE pgRectangle = NULL;
-PMYTEXT pgTexts = NULL;
+PGPAINTS pgPaints;
 
 VOID AddOneRectInfo(MYRECTANGLE myrc)
 {
-	if (pgRectangle == NULL)
+	if (pgPaints.pgRectangle == NULL)
 	{
-		pgRectangle = new MYRECTANGLE[DEF_BUFFER_SIZE];
-		if (pgRectangle == NULL)
+		pgPaints.pgRectangle = new MYRECTANGLE[DEF_BUFFER_SIZE];
+		if (pgPaints.pgRectangle == NULL)
 		{return;}		// 申请缓冲区不成功，直接返回
-		goCountSizerectangle = DEF_BUFFER_SIZE;
+		myCountSize.rectangle = DEF_BUFFER_SIZE;
 	}
-	if (goCountrectangle >= goCountSizerectangle)
+	if (myCount.rectangle >= myCountSize.rectangle)
 	{
 		// 扩大缓冲区
-		PRECTANGLE pNew = new MYRECTANGLE[goCountrectangle+DEF_BUFFER_INC_SIZE];
+		PRECTANGLE pNew = new MYRECTANGLE[myCount.rectangle+DEF_BUFFER_INC_SIZE];
 		if (pNew == NULL) return;	// 申请加大的缓冲区不成功，直接返回
 
-		memcpy(pNew, pgRectangle, goCountrectangle*sizeof(MYRECTANGLE));
-		if (goCountmessage != 0)
+		memcpy(pNew, pgPaints.pgRectangle, myCount.rectangle*sizeof(MYRECTANGLE));
+		if (myCount.message != 0)
 		{
-			delete pgRectangle;					// 释放之前的缓冲区
+			delete pgPaints.pgRectangle;					// 释放之前的缓冲区
 		}
-		pgRectangle = pNew;
-		goCountSizerectangle += DEF_BUFFER_INC_SIZE;
+		pgPaints.pgRectangle = pNew;
+		myCountSize.rectangle += DEF_BUFFER_INC_SIZE;
 	}
-	pgRectangle[goCountrectangle++] = myrc;		// 保存图形数据
+	pgPaints.pgRectangle[myCount.rectangle++] = myrc;		// 保存图形数据
 }
 
 VOID AddOneEllipseInfo(MYELLIPSE myep)
 {
-	if (pgEllipse == NULL)
+	if (pgPaints.pgEllipse == NULL)
 	{
-		pgEllipse = new MYELLIPSE[DEF_BUFFER_SIZE];
-		if (pgEllipse == NULL)	return;		// 申请缓冲区不成功，直接返回
-		goCountSizeellipse = DEF_BUFFER_SIZE;
+		pgPaints.pgEllipse = new MYELLIPSE[DEF_BUFFER_SIZE];
+		if (pgPaints.pgEllipse == NULL)	return;		// 申请缓冲区不成功，直接返回
+		myCountSize.ellipse = DEF_BUFFER_SIZE;
 	}
-	if (goCountellipse >= goCountSizeellipse)
+	if (myCount.ellipse >= myCountSize.ellipse)
 	{
 		// 扩大缓冲区
-		PELLIPSE pNew = new MYELLIPSE[goCountellipse+DEF_BUFFER_INC_SIZE];
+		PELLIPSE pNew = new MYELLIPSE[myCount.ellipse+DEF_BUFFER_INC_SIZE];
 		if (pNew == NULL) return;	// 申请加大的缓冲区不成功，直接返回
 
-		memcpy(pNew, pgEllipse, goCountellipse*sizeof(MYELLIPSE));
-		if (goCountmessage != 0)
+		memcpy(pNew, pgPaints.pgEllipse, myCount.ellipse*sizeof(MYELLIPSE));
+		if (myCount.message != 0)
 		{
-			delete pgEllipse;					// 释放之前的缓冲区
+			delete pgPaints.pgEllipse;					// 释放之前的缓冲区
 		}
-		pgEllipse = pNew;
-		goCountSizeellipse += DEF_BUFFER_INC_SIZE;
+		pgPaints.pgEllipse = pNew;
+		myCountSize.ellipse += DEF_BUFFER_INC_SIZE;
 	}
-	pgEllipse[goCountellipse++] = myep;		// 保存图形数据
+	pgPaints.pgEllipse[myCount.ellipse++] = myep;		// 保存图形数据
 }
 
 VOID AddOneLineInfo(MYLINE myl)
 {
-	if (pgLines == NULL)
+	if (pgPaints.pgLines == NULL)
 	{
-		pgLines = new MYLINE[DEF_BUFFER_SIZE];
-		if (pgLines == NULL)	return;		// 申请缓冲区不成功，直接返回
-		goCountSizeline = DEF_BUFFER_SIZE;
+		pgPaints.pgLines = new MYLINE[DEF_BUFFER_SIZE];
+		if (pgPaints.pgLines == NULL)	return;		// 申请缓冲区不成功，直接返回
+		myCountSize.line = DEF_BUFFER_SIZE;
 	}
-	if (goCountline >= goCountSizeline)
+	if (myCount.line >= myCountSize.line)
 	{
 		// 扩大缓冲区
-		PMYLINE pNew = new MYLINE[goCountline+DEF_BUFFER_INC_SIZE];
+		PMYLINE pNew = new MYLINE[myCount.line+DEF_BUFFER_INC_SIZE];
 		if (pNew == NULL) return;	// 申请加大的缓冲区不成功，直接返回
 
-		memcpy(pNew, pgLines, goCountline*sizeof(MYLINE));
-		if (goCountmessage != 0)
+		memcpy(pNew, pgPaints.pgLines, myCount.line*sizeof(MYLINE));
+		if (myCount.message != 0)
 		{
-			delete pgLines;					// 释放之前的缓冲区
+			delete pgPaints.pgLines;					// 释放之前的缓冲区
 		}
-		pgLines = pNew;
-		goCountSizeline += DEF_BUFFER_INC_SIZE;
+		pgPaints.pgLines = pNew;
+		myCountSize.line += DEF_BUFFER_INC_SIZE;
 	}
-	pgLines[goCountline++] = myl;		// 保存图形数据
+	pgPaints.pgLines[myCount.line++] = myl;		// 保存图形数据
 }
 
 VOID AddOneTextInfo(MYTEXT mytt)
 {
-	if (pgTexts == NULL)
+	if (pgPaints.pgTexts == NULL)
 	{
-		pgTexts = new MYTEXT[DEF_BUFFER_SIZE];
-		if (pgTexts == NULL)	return;		// 申请缓冲区不成功，直接返回
-		goCountSizemessage = DEF_BUFFER_SIZE;
+		pgPaints.pgTexts = new MYTEXT[DEF_BUFFER_SIZE];
+		if (pgPaints.pgTexts == NULL)	return;		// 申请缓冲区不成功，直接返回
+		myCountSize.message = DEF_BUFFER_SIZE;
 	}
-	if (goCountmessage >= goCountSizemessage)// 如果当前文本数大于缓冲区数
+	if (myCount.message >= myCountSize.message)// 如果当前文本数大于缓冲区数
 	{
 		// 扩大缓冲区
-		PMYTEXT pNewTexts = new MYTEXT[goCountmessage + DEF_BUFFER_INC_SIZE];
+		PMYTEXT pNewTexts = new MYTEXT[myCount.message + DEF_BUFFER_INC_SIZE];
 		if (pNewTexts == NULL) return;	// 申请加大的缓冲区不成功，直接返回
 
-		memcpy(pNewTexts, pgTexts, goCountmessage*sizeof(MYTEXT));
-		if (goCountmessage != 0)			// 在读取操作中freebuffer函数已经将原缓冲区清空，此时不能再清空一次
+		memcpy(pNewTexts, pgPaints.pgTexts, myCount.message*sizeof(MYTEXT));
+		if (myCount.message != 0)			// 在读取操作中freebuffer函数已经将原缓冲区清空，此时不能再清空一次
 		{
-			delete pgTexts;					// 释放之前的缓冲区
+			delete pgPaints.pgTexts;					// 释放之前的缓冲区
 		}
-		pgTexts = pNewTexts;			// 重新给原缓冲区赋值
-		goCountSizemessage += DEF_BUFFER_INC_SIZE;
+		pgPaints.pgTexts = pNewTexts;			// 重新给原缓冲区赋值
+		myCountSize.message += DEF_BUFFER_INC_SIZE;
 	}
-	pgTexts[goCountmessage++] = mytt;		// 保存图形数据
+	pgPaints.pgTexts[myCount.message++] = mytt;		// 保存图形数据
 }
 
 BOOL MySaveData(void)
 {
-	FILE* fp = fopen("e:\\vsworksapce\\conprehensive1_2\\conprehensive1_2\\a.bin", "wb");
+	FILE* fp = fopen("a.bin", "wb");
 
 	if (fp != NULL)
 	{
-		fwrite(&goCountline, sizeof(int), 1, fp);
-		fwrite(pgLines, sizeof(MYLINE), goCountline, fp);
+		fwrite(&myCount.line, sizeof(int), 1, fp);
+		fwrite(pgPaints.pgLines, sizeof(MYLINE), myCount.line, fp);
 
-		fwrite(&goCountrectangle, sizeof(int), 1, fp);
-		fwrite(pgRectangle, sizeof(MYRECTANGLE), goCountrectangle, fp);
+		fwrite(&myCount.rectangle, sizeof(int), 1, fp);
+		fwrite(pgPaints.pgRectangle, sizeof(MYRECTANGLE), myCount.rectangle, fp);
 
-		fwrite(&goCountellipse, sizeof(int), 1, fp);
-		fwrite(pgEllipse, sizeof(MYELLIPSE), goCountellipse, fp);
+		fwrite(&myCount.ellipse, sizeof(int), 1, fp);
+		fwrite(pgPaints.pgEllipse, sizeof(MYELLIPSE), myCount.ellipse, fp);
 
-		fwrite(&goCountmessage, sizeof(int), 1, fp);
-		fwrite(pgTexts, sizeof(MYTEXT), goCountmessage, fp);
+		fwrite(&myCount.message, sizeof(int), 1, fp);
+		fwrite(pgPaints.pgTexts, sizeof(MYTEXT), myCount.message, fp);
 
 		fclose(fp);
 		return TRUE;
@@ -146,7 +137,7 @@ BOOL MySaveData(void)
 BOOL MyLoadData(void)
 {
 	FreeBuffer();
-	FILE* fp = fopen("e:\\vsworksapce\\conprehensive1_2\\conprehensive1_2\\a.bin", "rb");
+	FILE* fp = fopen("a.bin", "rb");
 
 	if (fp != NULL)
 	{
@@ -196,28 +187,28 @@ BOOL MyLoadData(void)
 
 VOID FreeBuffer()
 {
-	if (pgLines != NULL)		// 如果原来有数据，删掉
+	if (pgPaints.pgLines != NULL)		// 如果原来有数据，删掉
 	{
-		delete pgLines;
-		goCountSizeline = 0;
-		goCountline = 0;
+		delete pgPaints.pgLines;
+		myCountSize.line = 0;
+		myCount.line = 0;
 	}
-	if (pgRectangle != NULL)		// 如果原来有数据，删掉
+	if (pgPaints.pgRectangle != NULL)		// 如果原来有数据，删掉
 	{
-		delete pgRectangle;
-		goCountSizerectangle = 0;
-		goCountrectangle = 0;
+		delete pgPaints.pgRectangle;
+		myCountSize.rectangle = 0;
+		myCount.rectangle = 0;
 	}
-	if (pgEllipse != NULL)		// 如果原来有数据，删掉
+	if (pgPaints.pgEllipse != NULL)		// 如果原来有数据，删掉
 	{
-		delete pgEllipse;
-		goCountSizeellipse = 0;
-		goCountellipse = 0;
+		delete pgPaints.pgEllipse;
+		myCountSize.ellipse = 0;
+		myCount.ellipse = 0;
 	}
-	if (pgTexts != NULL)		// 如果原来有数据，删掉
+	if (pgPaints.pgTexts != NULL)		// 如果原来有数据，删掉
 	{
-		delete pgTexts;
-		goCountSizemessage = 0;
-		goCountmessage = 0;
+		delete pgPaints.pgTexts;
+		myCountSize.message = 0;
+		myCount.message = 0;
 	}
 }
