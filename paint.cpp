@@ -13,14 +13,6 @@ void DrawMyline(HDC hdc, PMYLINE pLine)// 传递一条线
 	}
 }
 
-void DrawMyLines(HDC hdc, PMYLINE pLines, int iCount)// 传递一条线
-{
-	for (int i = 0; i < iCount; i++)
-	{
-		DrawMyline(hdc, pLines);
-	}
-}
-
 void DrawMyEllipse(HDC hdc, PELLIPSE pgEllipse)
 {
 	for (int i = 0; i < myCount.ellipse; i++)

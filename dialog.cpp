@@ -1,6 +1,5 @@
 #include "struct.h"
 
-MYTEXT gTexts;
 BOOL CALLBACK TextInputDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
@@ -9,7 +8,8 @@ BOOL CALLBACK TextInputDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 		switch (LOWORD(wParam))
 		{
 		case IDOK:
-			GetDlgItemText(hDlg, IDC_EDIT1, (LPWSTR)gTexts.szText, 128);
+			AddTextBuffer();
+			GetDlgItemText(hDlg, IDC_EDIT1, (LPWSTR)pgPaints.gTexts.pBuffer, 128);
 			EndDialog(hDlg, TRUE);
 			return TRUE;
 

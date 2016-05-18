@@ -5,11 +5,14 @@
 MYOCOUNT myCount;
 MYOCOUNT myCountSize;
 
-// 全局变量存放图元信息
+//全局变量存放图元信息
 PGPAINTS pgPaints;
 
 VOID AddOneRectInfo(MYRECTANGLE myrc)
 {
+// 	if (pgPaints==NULL)
+// 	{
+// 	}
 	if (pgPaints.pgRectangle == NULL)
 	{
 		pgPaints.pgRectangle = new MYRECTANGLE[DEF_BUFFER_SIZE];
@@ -59,7 +62,7 @@ VOID AddOneEllipseInfo(MYELLIPSE myep)
 	pgPaints.pgEllipse[myCount.ellipse++] = myep;		// 保存图形数据
 }
 
-VOID AddOneLineInfo(MYLINE myl)
+VOID AddOneLineInfo(PMYLINE myl)
 {
 	if (pgPaints.pgLines == NULL)
 	{
@@ -81,7 +84,7 @@ VOID AddOneLineInfo(MYLINE myl)
 		pgPaints.pgLines = pNew;
 		myCountSize.line += DEF_BUFFER_INC_SIZE;
 	}
-	pgPaints.pgLines[myCount.line++] = myl;		// 保存图形数据
+	pgPaints.pgLines[myCount.line++] = *myl;		// 保存图形数据
 }
 
 VOID AddOneTextInfo(MYTEXT mytt)
@@ -107,6 +110,14 @@ VOID AddOneTextInfo(MYTEXT mytt)
 		myCountSize.message += DEF_BUFFER_INC_SIZE;
 	}
 	pgPaints.pgTexts[myCount.message++] = mytt;		// 保存图形数据
+}
+
+void AddTextBuffer()
+{
+	pgPaints.gTexts.pBuffer = new char[DEF_BUFFER_SIZE];
+	if (pgPaints.gTexts.pBuffer == NULL)
+	{return;}		// 申请缓冲区不成功，直接返回
+	myCountSize.textBuffer = DEF_BUFFER_SIZE;
 }
 
 BOOL MySaveData(void)
@@ -148,7 +159,7 @@ BOOL MyLoadData(void)
 		{
 			MYLINE r;
 			fread(&r, sizeof(MYLINE), 1, fp);
-			AddOneLineInfo(r);
+			AddOneLineInfo(&r);
 		}
 
 		iCount = 0;

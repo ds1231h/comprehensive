@@ -71,10 +71,6 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	RECT        rect;
 	HMENU hMenu;
 	static int gDrawMode = DRAW_LINE;// 绘画模式
-	// 结构体存放图元信息
-	static MYLINE gLines;
-	static MYELLIPSE gEllipse;
-	static MYRECTANGLE gRectangle;
 	// 逻辑笔、刷、字体
 	static LOGPEN gPenInfo = {PS_SOLID, 1, RGB(0, 0, 0)};
 	static LOGBRUSH gBrInfo = { BS_SOLID, RGB(255, 255, 255), NULL};
@@ -169,30 +165,32 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_LBUTTONDOWN:
 		if(gDrawMode == DRAW_LINE)
 		{
-			gLines.ptS.x = GET_X_LPARAM(lParam);
-			gLines.ptS.y = GET_Y_LPARAM(lParam);
+			pgPaints.gLines.ptS.x = GET_X_LPARAM(lParam);
+			pgPaints.gLines.ptS.y = GET_Y_LPARAM(lParam);
 		}
 		else if (gDrawMode == DRAW_RECT)
 		{
-			gRectangle.rect.left = GET_X_LPARAM(lParam);
-			gRectangle.rect.top = GET_Y_LPARAM(lParam);
+			pgPaints.gRectangle.rect.left = GET_X_LPARAM(lParam);
+			pgPaints.gRectangle.rect.top = GET_Y_LPARAM(lParam);
 		}
 		else if (gDrawMode == DRAW_ELIP)
 		{
-			gEllipse.rect.left = GET_X_LPARAM(lParam);
-			gEllipse.rect.top = GET_Y_LPARAM(lParam);
+			pgPaints.gEllipse.rect.left = GET_X_LPARAM(lParam);
+			pgPaints.gEllipse.rect.top = GET_Y_LPARAM(lParam);
 		}
 		else if (gDrawMode == MYMESSAGE)
 		{
-			gTexts.ptS.x = GET_X_LPARAM(lParam);
-			gTexts.ptS.y = GET_Y_LPARAM(lParam);
+			
+			pgPaints.gTexts.ptS.x = GET_X_LPARAM(lParam);
+			pgPaints.gTexts.ptS.y = GET_Y_LPARAM(lParam);
 			// 弹出对话框输入文本内容
 			if (DialogBox((HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
 				MAKEINTRESOURCE(IDD_DIALOG1),
 				hWnd, TextInputDlgProc) == IDOK)
 			{
+				//pgPaints.gTexts.pBuffer[myCount.textBuffer++] = *pgPaints.gTexts.pBuffer;
 				// 内存管理
-				AddOneTextInfo(gTexts);
+				AddOneTextInfo(pgPaints.gTexts);
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 		}
@@ -201,28 +199,28 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_LBUTTONUP:
 		if(gDrawMode == DRAW_LINE)
 		{
-			gLines.ptE.x = GET_X_LPARAM(lParam);
-			gLines.ptE.y = GET_Y_LPARAM(lParam);
-			gLines.penInfo = gPenInfo;
-			AddOneLineInfo(gLines);
+			pgPaints.gLines.ptE.x = GET_X_LPARAM(lParam);
+			pgPaints.gLines.ptE.y = GET_Y_LPARAM(lParam);
+			pgPaints.gLines.penInfo = gPenInfo;
+			AddOneLineInfo(&pgPaints.gLines);
 			InvalidateRect(hWnd, NULL, TRUE);
 		}
 		else if (gDrawMode == DRAW_RECT)
 		{
-			gRectangle.rect.right = GET_X_LPARAM(lParam);
-			gRectangle.rect.bottom = GET_Y_LPARAM(lParam);
-			gRectangle.brInfo = gBrInfo;
-			gRectangle.penInfo = gPenInfo;
-			AddOneRectInfo(gRectangle);
+			pgPaints.gRectangle.rect.right = GET_X_LPARAM(lParam);
+			pgPaints.gRectangle.rect.bottom = GET_Y_LPARAM(lParam);
+			pgPaints.gRectangle.brInfo = gBrInfo;
+			pgPaints.gRectangle.penInfo = gPenInfo;
+			AddOneRectInfo(pgPaints.gRectangle);
 			InvalidateRect(hWnd, NULL, TRUE);
 		}
 		else if (gDrawMode == DRAW_ELIP)
 		{
-			gEllipse.rect.right = GET_X_LPARAM(lParam);
-			gEllipse.rect.bottom = GET_Y_LPARAM(lParam);
-			gEllipse.brInfo = gBrInfo;
-			gEllipse.penInfo = gPenInfo;
-			AddOneEllipseInfo(gEllipse);
+			pgPaints.gEllipse.rect.right = GET_X_LPARAM(lParam);
+			pgPaints.gEllipse.rect.bottom = GET_Y_LPARAM(lParam);
+			pgPaints.gEllipse.brInfo = gBrInfo;
+			pgPaints.gEllipse.penInfo = gPenInfo;
+			AddOneEllipseInfo(pgPaints.gEllipse);
 			InvalidateRect(hWnd, NULL, TRUE);
 		}
 		return 0;
@@ -236,7 +234,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		for (int i=0; i <myCount.message; i++)
 		{
 			TextOut(hdc, pgPaints.pgTexts[i].ptS.x, pgPaints.pgTexts[i].ptS.y, 
-				(LPCWSTR)pgPaints.pgTexts[i].szText, lstrlen((LPCWSTR)pgPaints.pgTexts[i].szText));
+				(LPCWSTR)pgPaints.pgTexts[i].pBuffer, lstrlen((LPCWSTR)pgPaints.pgTexts[i].pBuffer));// 一直显示最后一次pBuffer的值
 		}
 		EndPaint(hWnd, &ps ); 
 		return 0;

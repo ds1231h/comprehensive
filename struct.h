@@ -53,7 +53,8 @@ typedef struct goCount
 	int ellipse;
 	int rectangle;
 	int message;
-}MYOCOUNT, PMYOCOUNT;
+	int textBuffer;
+}MYOCOUNT, *PMYOCOUNT;
 
 typedef struct pgpaints
 {
@@ -61,11 +62,16 @@ typedef struct pgpaints
 	PELLIPSE pgEllipse;
 	PRECTANGLE pgRectangle;
 	PMYTEXT pgTexts;
+	MYLINE gLines;
+	MYELLIPSE gEllipse;
+	MYRECTANGLE gRectangle;
+	MYTEXT gTexts;
 }PGPAINTS;
 // 声明变量
 extern MYOCOUNT myCount;
 extern MYTEXT gTexts;
 extern PGPAINTS pgPaints;
+extern MYOCOUNT myCountSize;
 
 // 函数声明
 BOOL MySaveData(void);
@@ -74,14 +80,14 @@ BOOL GetMyColor(HWND hWnd, COLORREF *pColor);
 BOOL InitWindow(HINSTANCE hInstance, int nCmdShow);
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void DrawMyline(HDC hdc, PMYLINE pLine);
-void DrawMyLines(HDC hdc, PMYLINE pLines, int iCount);
 void DrawMyEllipse(HDC hdc, PELLIPSE pEllipse);
 void DrawMyRectangle(HDC hdc, PRECTANGLE pRectangle);
-VOID FreeBuffer();
-VOID AddOneRectInfo(MYRECTANGLE myrc);
-VOID AddOneEllipseInfo(MYELLIPSE myrc);
-VOID AddOneLineInfo(MYLINE myrc);
-VOID AddOneTextInfo(MYTEXT mytt);
+VOID FreeBuffer(void);
+VOID AddOneRectInfo(MYRECTANGLE);
+VOID AddOneEllipseInfo(MYELLIPSE);
+VOID AddOneLineInfo(PMYLINE);
+VOID AddOneTextInfo(MYTEXT);
 BOOL CALLBACK TextInputDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+void AddTextBuffer();
 
 #endif
