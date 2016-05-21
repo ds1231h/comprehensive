@@ -44,7 +44,7 @@ typedef struct MyText
 	POINT		ptS;
 	LOGFONT		fontInfo;
 	char*		pBuffer;	// 指针方式文本缓冲区，根据输入文本长度申请内存
-	CHAR szText[128];
+	DWORD		rgbCurrent;
 }MYTEXT, *PMYTEXT;
 
 typedef struct goCount
@@ -77,11 +77,13 @@ extern MYOCOUNT myCountSize;
 BOOL MySaveData(void);
 BOOL MyLoadData(void);
 BOOL GetMyColor(HWND hWnd, COLORREF *pColor);
+BOOL GetMyFont(HWND hWnd, LOGFONT *lf, DWORD *rgbCurrent);
 BOOL InitWindow(HINSTANCE hInstance, int nCmdShow);
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void DrawMyline(HDC hdc, PMYLINE pLine);
 void DrawMyEllipse(HDC hdc, PELLIPSE pEllipse);
 void DrawMyRectangle(HDC hdc, PRECTANGLE pRectangle);
+void DrawMytext(HDC hdc, PMYTEXT pText);
 VOID FreeBuffer(void);
 VOID AddOneRectInfo(MYRECTANGLE);
 VOID AddOneEllipseInfo(MYELLIPSE);

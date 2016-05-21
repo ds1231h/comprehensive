@@ -10,9 +10,6 @@ PGPAINTS pgPaints;
 
 VOID AddOneRectInfo(MYRECTANGLE myrc)
 {
-// 	if (pgPaints==NULL)
-// 	{
-// 	}
 	if (pgPaints.pgRectangle == NULL)
 	{
 		pgPaints.pgRectangle = new MYRECTANGLE[DEF_BUFFER_SIZE];

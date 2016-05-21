@@ -47,6 +47,20 @@ void DrawMyRectangle(HDC hdc, PRECTANGLE pgRectangle)
 	}
 }
 
+void DrawMytext(HDC hdc, PMYTEXT pText)
+{
+	for (int i=0; i <myCount.message; i++)
+	{
+		HFONT hfont = CreateFontIndirect(&pText[i].fontInfo);
+		HFONT hfontPrev = (HFONT)SelectObject(hdc, hfont);
+		SetTextColor(hdc, pText[i].rgbCurrent);
+		TextOut(hdc, pgPaints.pgTexts[i].ptS.x, pgPaints.pgTexts[i].ptS.y, 
+			(LPCWSTR)pgPaints.pgTexts[i].pBuffer, lstrlen((LPCWSTR)pgPaints.pgTexts[i].pBuffer));// 一直显示最后一次pBuffer的值
+		SelectObject(hdc, hfontPrev);
+		DeleteObject(hfont);
+	}
+}
+
 BOOL GetMyColor(HWND hWnd, COLORREF *pColor)
 {
 	BOOL bRet = FALSE;
@@ -75,4 +89,26 @@ BOOL GetMyColor(HWND hWnd, COLORREF *pColor)
 		bRet = TRUE;
 	}
 	return bRet;
+}
+
+BOOL GetMyFont(HWND hWnd, LOGFONT *lf, DWORD *rgbCurrent)
+{
+	CHOOSEFONT  cf;
+	HFONT hfont, hfontPrev;
+	DWORD rgbPrev;
+
+	ZeroMemory(&cf, sizeof(cf));
+	cf.lStructSize = sizeof (cf);
+	cf.hwndOwner = hWnd;
+	cf.lpLogFont = lf;
+	cf.rgbColors = *rgbCurrent;
+	cf.Flags = CF_SCREENFONTS | CF_EFFECTS;
+
+	if (ChooseFont(&cf)==TRUE)
+	{
+		*rgbCurrent= cf.rgbColors;
+		lf = cf.lpLogFont;
+		return TRUE;
+	}
+	return FALSE;
 }

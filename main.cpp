@@ -75,7 +75,8 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static LOGPEN gPenInfo = {PS_SOLID, 1, RGB(0, 0, 0)};
 	static LOGBRUSH gBrInfo = { BS_SOLID, RGB(255, 255, 255), NULL};
 	static LOGFONT gFontInfo;
-
+	static DWORD rgbCurrent;
+	
 	switch (message)
 	{
 	case WM_INITMENUPOPUP:
@@ -157,7 +158,11 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			case ID_SETTING_BRUSH:
 				GetMyColor(hWnd, &gBrInfo.lbColor);
-				break;
+				return 0;
+
+			case ID_SETTING_FONT:
+				GetMyFont(hWnd, &gFontInfo, &rgbCurrent);
+				return 0;
 			}
 		}
 
@@ -183,13 +188,13 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			
 			pgPaints.gTexts.ptS.x = GET_X_LPARAM(lParam);
 			pgPaints.gTexts.ptS.y = GET_Y_LPARAM(lParam);
+			pgPaints.gTexts.fontInfo = gFontInfo;
+			pgPaints.gTexts.rgbCurrent = rgbCurrent;
 			// 弹出对话框输入文本内容
 			if (DialogBox((HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
 				MAKEINTRESOURCE(IDD_DIALOG1),
 				hWnd, TextInputDlgProc) == IDOK)
 			{
-				//pgPaints.gTexts.pBuffer[myCount.textBuffer++] = *pgPaints.gTexts.pBuffer;
-				// 内存管理
 				AddOneTextInfo(pgPaints.gTexts);
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
@@ -231,11 +236,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		DrawMyline(hdc, pgPaints.pgLines);
 		DrawMyEllipse(hdc, pgPaints.pgEllipse);
 		DrawMyRectangle(hdc, pgPaints.pgRectangle);
-		for (int i=0; i <myCount.message; i++)
-		{
-			TextOut(hdc, pgPaints.pgTexts[i].ptS.x, pgPaints.pgTexts[i].ptS.y, 
-				(LPCWSTR)pgPaints.pgTexts[i].pBuffer, lstrlen((LPCWSTR)pgPaints.pgTexts[i].pBuffer));// 一直显示最后一次pBuffer的值
-		}
+		DrawMytext(hdc, pgPaints.pgTexts);
 		EndPaint(hWnd, &ps ); 
 		return 0;
 
