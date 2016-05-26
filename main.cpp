@@ -76,6 +76,8 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static LOGBRUSH gBrInfo = { BS_SOLID, RGB(255, 255, 255), NULL};
 	static LOGFONT gFontInfo;
 	static DWORD rgbCurrent;
+	// 选中操作所需变量
+	LONG sx, sy;
 	
 	switch (message)
 	{
@@ -135,7 +137,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				}
 				return 0;
 
-				// 判断绘图模式
+			// 判断绘图模式
 			case ID_DRAW_DRAWMYLINE:
 				gDrawMode = DRAW_LINE;
 				return 0;
@@ -152,6 +154,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				gDrawMode = MYMESSAGE;
 				return 0;
 
+			// 选择笔、刷、字体
 			case ID_SETTING_PEN:
 				GetMyColor(hWnd, &gPenInfo.lopnColor);
 				return 0;
@@ -230,6 +233,13 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 
+	case WM_RBUTTONDOWN: // 右键选中图元区域
+		sx = GET_X_LPARAM(lParam);
+		sy = GET_Y_LPARAM(lParam);
+		selectObj(myCount, sx, sy, gPenInfo, gBrInfo, gFontInfo);
+		InvalidateRect(hWnd, NULL, TRUE);
+		return 0;
+
 	case WM_PAINT:
 		hdc=BeginPaint (hWnd, &ps);
 		GetClientRect (hWnd, &rect);
@@ -249,4 +259,3 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hWnd, message, wParam, lParam);
 
 }
-

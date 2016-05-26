@@ -111,10 +111,9 @@ VOID AddOneTextInfo(MYTEXT mytt)
 
 void AddTextBuffer()
 {
-	pgPaints.gTexts.pBuffer = new char[DEF_BUFFER_SIZE];
+	pgPaints.gTexts.pBuffer = new char[128]; // 开辟一个缓冲区来存放文本信息
 	if (pgPaints.gTexts.pBuffer == NULL)
 	{return;}		// 申请缓冲区不成功，直接返回
-	myCountSize.textBuffer = DEF_BUFFER_SIZE;
 }
 
 BOOL MySaveData(void)

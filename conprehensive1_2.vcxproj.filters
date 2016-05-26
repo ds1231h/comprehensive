@@ -40,5 +40,8 @@
     <ClCompile Include="paint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="select.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

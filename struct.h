@@ -91,5 +91,6 @@ VOID AddOneLineInfo(PMYLINE);
 VOID AddOneTextInfo(MYTEXT);
 BOOL CALLBACK TextInputDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 void AddTextBuffer();
+void selectObj(MYOCOUNT myCount, LONG sx, LONG sy, LOGPEN gPenInfo, LOGBRUSH gBrushInfo, LOGFONT gFontInfo);
 
 #endif
